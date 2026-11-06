@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo-Odyssey: Flight to the Outer Rim</title>
+    
+    <!-- Google Fonts: Orbitron & Rajdhani -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- HOME SCREEN -->
+    <div id="home-screen" class="screen">
+        <div class="space-starfield">
+            <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+            <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span>
+            <span class="star s7"></span><span class="star s8"></span><span class="star s9"></span>
+            <span class="star s10"></span><span class="star s11"></span><span class="star s12"></span>
+            <span class="star s13"></span><span class="star s14"></span><span class="star s15"></span>
+        </div>
+
+        <div class="solar-sun"></div>
+        <div class="sun-glow"></div>
+
+        <div class="orbit-path orbit-1"></div>
+        <div class="orbit-path orbit-2"></div>
+        <div class="orbit-path orbit-3"></div>
+        <div class="orbit-path orbit-4"></div>
+        <div class="orbit-path orbit-5"></div>
+
+        <div class="planet p-mercury"></div>
+        <div class="planet p-venus"></div>
+        <div class="planet p-earth"></div>
+        <div class="planet p-mars"></div>
+        <div class="planet p-jupiter"></div>
+        <div class="planet p-saturn"><div class="saturn-ring"></div></div>
+        <div class="planet p-uranus"><div class="uranus-ring"></div></div>
+        <div class="planet p-neptune"></div>
+
+        <div class="home-card">
+            <h1 class="glow-title">GEO-ODYSSEY</h1>
+            <div class="subtitle">Flight to the Outer Rim</div>
+            <div class="home-stats">Personal Best High Score: <span id="home-highscore">0</span> PTS</div>
+            <p class="game-desc">
+                Plot your course across the world map! Every correct coordinate match fuels your rocket engine. Navigate past the Moon, Mars, Jupiter, and deep into the outer solar system all the way to the Kuiper Belt. Incorrect target locks drain your life support. Safe journey, Commander!
+            </p>
+            <button id="start-btn" class="space-btn">Launch Mission</button>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <!-- HUD -->
+            <div class="hud">
+                <div id="lives-display" class="hud-item">Life Support: <span id="lives-val">❤️❤️❤️</span></div>
+                <div id="prompt-text" class="prompt-box">Loading Mission Question...</div>
+                <div id="score-display" class="hud-item">Score: <span id="score-val">0</span> PTS</div>
+            </div>
+
+            <div class="workspace">
+                <!-- Left Sidebar: Mission Radar / Extended Rocket Tracker -->
+                <div class="space-sidebar">
+                    <div class="stars-overlay"></div>
+                    <h3>MISSION RADAR</h3>
+                    <div class="space-track">
+                        <div class="space-line"></div>
+                        <div id="rocket-icon" class="rocket-marker">🚀</div>
+                        <div class="milestone" data-score="0"><span class="dot"></span>🌍 Earth <span class="pts">(0)</span></div>
+                        <div class="milestone" data-score="500"><span class="dot"></span>🌙 Moon <span class="pts">(500)</span></div>
+                        <div class="milestone" data-score="1500"><span class="dot"></span>🔴 Mars <span class="pts">(1.5k)</span></div>
+                        <div class="milestone" data-score="3000"><span class="dot"></span>🪐 Jupiter <span class="pts">(3k)</span></div>
+                        <div class="milestone" data-score="5500"><span class="dot"></span>🪐 Saturn <span class="pts">(5.5k)</span></div>
+                        <div class="milestone" data-score="9000"><span class="dot"></span>🔵 Uranus <span class="pts">(9k)</span></div>
+                        <div class="milestone" data-score="13000"><span class="dot"></span>🌀 Neptune <span class="pts">(13k)</span></div>
+                        <div class="milestone" data-score="20000"><span class="dot"></span>❄️ Pluto <span class="pts">(20k)</span></div>
+                        <div class="milestone" data-score="30000"><span class="dot"></span>🌌 Kuiper Belt <span class="pts">(30k)</span></div>
+                    </div>
+                </div>
+
+                <!-- Map Viewport -->
+                <div id="map"></div>
+
+                <!-- Right Sidebar: Reward Tiers Reference Table -->
+                <div class="right-sidebar">
+                    <h3>REWARD TIERS</h3>
+                    <div class="rewards-table">
+                        <div class="reward-row universe">
+                            <div class="reward-name">🌠 Cosmic Answer</div>
+                            <div class="reward-desc"><span>Super Rare Match</span><span class="pts">+300 pts</span></div>
+                        </div>
+                        <div class="reward-row">
+                            <div class="reward-name">🚀 Galactic Answer</div>
+                            <div class="reward-desc"><span>Rare Match</span><span class="pts">+175 pts</span></div>
+                        </div>
+                        <div class="reward-row">
+                            <div class="reward-name">🪐 Stellar Answer</div>
+                            <div class="reward-desc"><span>Uncommon Match</span><span class="pts">+100 pts</span></div>
+                        </div>
+                        <div class="reward-row">
+                            <div class="reward-name">🌍 Lunar Answer</div>
+                            <div class="reward-desc"><span>Common Match</span><span class="pts">+50 pts</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEEDBACK MODAL -->
+    <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="feedback-title">Mission Update</h2>
+            <p id="feedback-desc">Details go here...</p>
+            <button id="modal-action-btn" class="space-btn">Proceed Mission</button>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Game JS -->
+    <script src="game.js"></script>
+</body>
+</html>
